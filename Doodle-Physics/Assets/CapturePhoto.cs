@@ -16,7 +16,13 @@ public class CapturePhoto : MonoBehaviour
     Texture2D screenshot;
     bool captured = false;
     public int FileCounter = 0;
-    private void Start()
+
+    string fileName;
+    public bool onLoaded = false;
+    Texture2D loadedImageTexture;
+    public Image img;
+    
+     private void Start()
     {
         defaultBackground = background.texture;
         WebCamDevice[] cameras = WebCamTexture.devices;
@@ -45,7 +51,7 @@ public class CapturePhoto : MonoBehaviour
         background.texture = rearView;
 
         camExists = true;
-        screenshot = new Texture2D(300, 200, TextureFormat.RGB24, false);
+        screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);   //Screenshot whole screen
     }
     private void Update()
     {
@@ -67,6 +73,11 @@ public class CapturePhoto : MonoBehaviour
         {
             StartCoroutine("Capture");
         }
+
+       // if (Input.GetKeyDown(KeyCode.Mouse1))
+         // {
+           //    StartCoroutine("LoadCapture");
+          //}
        //debugging only--
        // StartCoroutine("Capture");
     }
@@ -80,29 +91,47 @@ public class CapturePhoto : MonoBehaviour
             GUI.DrawTexture(new Rect(40, 40, 80, 80), screenshot, ScaleMode.StretchToFill);
         }
 
+       // if (onLoaded)
+         // {
+           //    GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), loadedImageTexture, ScaleMode.ScaleToFit);
+          //}
+
         
     }
 
-    IEnumerator Capture()
-    {
-        Debug.Log("inside coroutine");
-        yield return new WaitForEndOfFrame();
-        screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        screenshot.Apply();
-        captured = true;
-        
-        var byteArray = screenshot.EncodeToPNG();
-        string fileName = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-        File.WriteAllBytes(Application.persistentDataPath + "/" + fileName + ".png", byteArray);
+     IEnumerator Capture()
+     {
+          Debug.Log("inside coroutine");
+          yield return new WaitForEndOfFrame();
+          screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+          screenshot.Apply();
+          captured = true;
 
+          //var byteArray = screenshot.EncodeToPNG();
+          byte[] byteArray = screenshot.EncodeToPNG();  //mine
+          fileName = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+          File.WriteAllBytes(Application.persistentDataPath + "/" + fileName + ".png", byteArray);
 
-        //broken load image code
-        //var fileName2 = Application.persistentDataPath + "/" + fileName + ".png";
-        //var bytes = File.ReadAllBytes(fileName2);
-        //var texture = new Texture2D(73, 73);
-        //texture.LoadImage(bytes);
-        //GUI.Button(new Rect(0, 0, 800, 100), texture);
-    }
+          //Load Image Code  
+          //background.gameObject.SetActive(false); //mine
+          byte[] readImage = null;
+          readImage = File.ReadAllBytes(Application.persistentDataPath + "/" + fileName + ".png");
+
+          loadedImageTexture = new Texture2D(300, 200, TextureFormat.RGB24, false);
+          loadedImageTexture.LoadImage(readImage);
+          GameObject newImage = GameObject.Find("Background");     //newImage is the backGround from webcam now
+          newImage.GetComponent<RawImage>().texture = loadedImageTexture;    //Sets newImage as loadedImage
+
+}
+     /*IEnumerator LoadCapture()
+     {
+          yield return new WaitForEndOfFrame();
+          
+     
+          //img.sprite = s;
+          //loadedImageTexture.Apply();
+          //onLoaded = true;
+     }*/
 
 }
 
