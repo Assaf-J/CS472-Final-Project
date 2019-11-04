@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.IO;
+using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class CapturePhoto : MonoBehaviour
 {
@@ -17,12 +19,12 @@ public class CapturePhoto : MonoBehaviour
     bool captured = false;
     public int FileCounter = 0;
 
-    string fileName;
+    public static string fileName;
     public bool onLoaded = false;
     Texture2D loadedImageTexture;
     public Image img;
-    
-     private void Start()
+
+    private void Start()
     {
         defaultBackground = background.texture;
         WebCamDevice[] cameras = WebCamTexture.devices;
@@ -40,9 +42,8 @@ public class CapturePhoto : MonoBehaviour
                 rearView = new WebCamTexture(cameras[i].name, Screen.width, Screen.height);
             }
         }
-        //debugging only--
-        //rearView = new WebCamTexture(cameras[0].name, Screen.width, Screen.height);
-     
+
+
         if (rearView == null)
         {
             return;
@@ -57,7 +58,6 @@ public class CapturePhoto : MonoBehaviour
     {
         if (!camExists)
             return;
-        Debug.Log("before coroutine");
         //Reference: https://www.youtube.com/watch?v=c6NXkZWXHnc
         float ratio = (float)rearView.width / (float)rearView.height;
         ratioFitter.aspectRatio = ratio;
@@ -74,12 +74,6 @@ public class CapturePhoto : MonoBehaviour
             StartCoroutine("Capture");
         }
 
-       // if (Input.GetKeyDown(KeyCode.Mouse1))
-         // {
-           //    StartCoroutine("LoadCapture");
-          //}
-       //debugging only--
-       // StartCoroutine("Capture");
     }
     //screenshot
     //reference for ONGUI and Capture :https://www.youtube.com/watch?v=bQayHTts7HI
@@ -91,47 +85,23 @@ public class CapturePhoto : MonoBehaviour
             GUI.DrawTexture(new Rect(40, 40, 80, 80), screenshot, ScaleMode.StretchToFill);
         }
 
-       // if (onLoaded)
-         // {
-           //    GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), loadedImageTexture, ScaleMode.ScaleToFit);
-          //}
-
-        
     }
 
-     IEnumerator Capture()
-     {
-          Debug.Log("inside coroutine");
-          yield return new WaitForEndOfFrame();
-          screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-          screenshot.Apply();
-          captured = true;
+    IEnumerator Capture()
+    {
+        yield return new WaitForEndOfFrame();
+        screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenshot.Apply();
+        captured = true;
 
-          //var byteArray = screenshot.EncodeToPNG();
-          byte[] byteArray = screenshot.EncodeToPNG();  //mine
-          fileName = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-          File.WriteAllBytes(Application.persistentDataPath + "/" + fileName + ".png", byteArray);
+        //var byteArray = screenshot.EncodeToPNG();
+        byte[] byteArray = screenshot.EncodeToPNG();  //mine
+        fileName = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+        File.WriteAllBytes(Application.persistentDataPath + "/" + fileName + ".png", byteArray);
 
-          //Load Image Code  
-          //background.gameObject.SetActive(false); //mine
-          byte[] readImage = null;
-          readImage = File.ReadAllBytes(Application.persistentDataPath + "/" + fileName + ".png");
+        SceneManager.LoadScene("load_photo");
+      
+    }
 
-          loadedImageTexture = new Texture2D(300, 200, TextureFormat.RGB24, false);
-          loadedImageTexture.LoadImage(readImage);
-          GameObject newImage = GameObject.Find("Background");     //newImage is the backGround from webcam now
-          newImage.GetComponent<RawImage>().texture = loadedImageTexture;    //Sets newImage as loadedImage
 
 }
-     /*IEnumerator LoadCapture()
-     {
-          yield return new WaitForEndOfFrame();
-          
-     
-          //img.sprite = s;
-          //loadedImageTexture.Apply();
-          //onLoaded = true;
-     }*/
-
-}
-
