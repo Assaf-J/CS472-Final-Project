@@ -23,8 +23,8 @@ public class LoadingImage : MonoBehaviour
 
         loadedImageTexture = new Texture2D(300, 200, TextureFormat.RGB24, false);
         loadedImageTexture.LoadImage(readImage);
-       // GameObject newImage = GameObject.Find("Background");     //newImage is the backGround from webcam now
-       // newImage.GetComponent<RawImage>().texture = loadedImageTexture;
+        // GameObject newImage = GameObject.Find("Background");     //newImage is the backGround from webcam now
+        // newImage.GetComponent<RawImage>().texture = loadedImageTexture;
 
         img = new Texture2D(loadedImageTexture.width, loadedImageTexture.height);
         //initialize textures
@@ -37,17 +37,15 @@ public class LoadingImage : MonoBehaviour
         gL = new float[img.width, img.height];
         bL = new float[img.width, img.height];
         kL = new float[img.width, img.height];
-       
+
         SUML = new float[img.width, img.height];
-       
+
         roImg = new Texture2D(img.width, img.height);
         goImg = new Texture2D(img.width, img.height);
         boImg = new Texture2D(img.width, img.height);
         koImg = new Texture2D(img.width, img.height);
-       
-        SUMimg = new Texture2D(img.width, img.height);
-     
 
+        SUMimg = new Texture2D(img.width, img.height);
 
         GetWebCamImage();
 
@@ -56,6 +54,7 @@ public class LoadingImage : MonoBehaviour
     {
         img.SetPixels(loadedImageTexture.GetPixels());
         CalculateEdges();
+
     }
 
     void CalculateEdges()
@@ -89,9 +88,9 @@ public class LoadingImage : MonoBehaviour
                 gL[x, y] = gradientValue(x, y, 1, gImg);
                 bL[x, y] = gradientValue(x, y, 2, bImg);
                 kL[x, y] = gradientValue(x, y, 2, kImg);
-              
+
                 SUML[x, y] = rL[x, y] + gL[x, y] + bL[x, y];
-                
+
             }
         }
         //create texture from gradient values
@@ -99,21 +98,18 @@ public class LoadingImage : MonoBehaviour
         TextureFromGradientRef(gL, th, ref goImg);
         TextureFromGradientRef(bL, th, ref boImg);
         TextureFromGradientRef(kL, th, ref koImg);
-    
+
         TextureFromGradientRef(SUML, th, ref SUMimg);
-  
+
+
     }
 
-    // Update is called once per frame
     void OnGUI()
     {
-        GUILayout.BeginHorizontal();
-        GUILayout.BeginVertical();
-        GUILayout.Label("SUM detection");
-        GUILayout.Label(SUMimg);
-        GUILayout.EndVertical();
+        
+        GameObject newImage = GameObject.Find("Background");     //newImage is the backGround from webcam now
+        newImage.GetComponent<RawImage>().texture = SUMimg;
 
-        GUILayout.EndHorizontal();
     }
 
     float gradientValue(int ex, int why, int colorVal, Texture2D image)
@@ -141,7 +137,7 @@ public class LoadingImage : MonoBehaviour
             }
         }
         output.Apply();
-        
+
         return output;
     }
 
@@ -158,7 +154,8 @@ public class LoadingImage : MonoBehaviour
             }
         }
         output.Apply();
-        
+
+
     }
     void Update()
     {
