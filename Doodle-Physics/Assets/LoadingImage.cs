@@ -23,9 +23,7 @@ public class LoadingImage : MonoBehaviour
 
         loadedImageTexture = new Texture2D(300, 200, TextureFormat.RGB24, false);
         loadedImageTexture.LoadImage(readImage);
-        // GameObject newImage = GameObject.Find("Background");     //newImage is the backGround from webcam now
-        // newImage.GetComponent<RawImage>().texture = loadedImageTexture;
-
+       
         img = new Texture2D(loadedImageTexture.width, loadedImageTexture.height);
         //initialize textures
         rImg = new Texture2D(img.width, img.height);
