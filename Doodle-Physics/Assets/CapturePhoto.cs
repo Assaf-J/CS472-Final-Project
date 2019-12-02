@@ -43,7 +43,6 @@ public class CapturePhoto : MonoBehaviour
             }
         }
 
-
         if (rearView == null)
         {
             return;
@@ -73,18 +72,15 @@ public class CapturePhoto : MonoBehaviour
         {
             StartCoroutine("Capture");
         }
-
     }
     //screenshot
     //reference for ONGUI and Capture :https://www.youtube.com/watch?v=bQayHTts7HI
     void OnGUI()
     {
-
-        if (captured)
-        {
-            GUI.DrawTexture(new Rect(40, 40, 80, 80), screenshot, ScaleMode.StretchToFill);
-        }
-
+          if (captured)
+          {
+               GUI.DrawTexture(new Rect(40, 40, 80, 80), screenshot, ScaleMode.StretchToFill);
+          } 
     }
 
     IEnumerator Capture()
@@ -100,8 +96,5 @@ public class CapturePhoto : MonoBehaviour
         File.WriteAllBytes(Application.persistentDataPath + "/" + fileName + ".png", byteArray);
 
         SceneManager.LoadScene("load_photo");
-      
     }
-
-
 }
