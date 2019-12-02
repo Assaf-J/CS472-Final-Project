@@ -12,6 +12,9 @@ public class ScreenRez : MonoBehaviour
      {
           GameObject myCanvas = GameObject.Find("Canvas");
           displayRez = Screen.currentResolution;
+          //myCanvas.GetComponent<RectTransform>().sizeDelta = new Vector2(displayRez.width, displayRez.height);
           myCanvas.GetComponent<RectTransform>().sizeDelta = new Vector2(displayRez.width, displayRez.height);
+
+
      }
 }

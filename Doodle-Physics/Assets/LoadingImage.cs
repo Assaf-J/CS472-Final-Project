@@ -50,7 +50,7 @@ public class LoadingImage : MonoBehaviour
           koImg = new Texture2D(img.width, img.height);
           sumImg = new Texture2D(img.width, img.height);
 
-          GameObject col = GameObject.Find("TerrainColliders");
+          GameObject col = GameObject.Find("Background");
           myEdgeCollider = col.gameObject.AddComponent<EdgeCollider2D>();
 
           GetWebCamImage();
