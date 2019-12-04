@@ -72,6 +72,12 @@ public class CapturePhoto : MonoBehaviour
         {
             StartCoroutine("Capture");
         }
+
+        //Exit back to menu
+        if (Input.GetKeyDown(KeyCode.Escape))
+          {
+               SceneManager.LoadScene("start_screen");
+          }
     }
     //screenshot
     //reference for ONGUI and Capture :https://www.youtube.com/watch?v=bQayHTts7HI
