@@ -104,13 +104,9 @@ public class LoadingImage : MonoBehaviour
 
             }
         }
-        //create texture from gradient values
-        //TextureFromGradientRef(rL, th, ref roImg);
-        //TextureFromGradientRef(gL, th, ref goImg);
-        //TextureFromGradientRef(bL, th, ref boImg);
+ 
         TextureFromGradientRef(sumL, th, ref sumImg);
-        //TextureFromGradientRef(kL, th, ref koImg);
-
+   
 
     }
 
@@ -133,7 +129,7 @@ public class LoadingImage : MonoBehaviour
 
     void TextureFromGradientRef(float[,] g, float thres, ref Texture2D output)
     {
-        /*colliderPoints = new List<Vector2>();
+        colliderPoints = new List<Vector2>();
         int j = 0;
         int yPrev = 0;
 
@@ -160,45 +156,8 @@ public class LoadingImage : MonoBehaviour
         }
 
         myEdgeCollider.points = colliderPoints.ToArray();
-        output.Apply();*/
-
-        colliderPoints = new List<Vector2>();
-        int value_prev = 0;
-        for (int x = 0; x < output.width; x++)
-        {
-            List<int> y_list = new List<int>();
-            for (int y = 0; y < output.height - 1; y++)
-            {
-                if (g[x, y] >= thres)
-                {
-                    y_list.Add(y);
-                }
-                else
-                    output.SetPixel(x, y, Color.white);
-            }
-
-            if (y_list.Count > 0)
-            {
-                int median = (int)y_list.Count / 2;
-
-                if (x == 0)
-                {
-                    value_prev = y_list[median];
-                }
-
-                if ((y_list[median] - value_prev > 50) || (value_prev - y_list[median] > 50))
-                {
-                    y_list[median] = value_prev;
-                }
-
-                colliderPoints.Add(new Vector2(x, y_list[median]));
-
-                value_prev = y_list[median];
-            }
-        }
-
-        myEdgeCollider.points = colliderPoints.ToArray();
         output.Apply();
+
     }
 
     void Update()
