@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - ExitMenu
-  - loading
   layers:
   - Default
   - TransparentFX

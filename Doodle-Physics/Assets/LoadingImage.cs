@@ -21,18 +21,10 @@ public class LoadingImage : MonoBehaviour
     Rigidbody2D rb;
     float deltaX, deltaY;
     bool moveBall = false;
-     
-    //Adds the loading screen
-    GameObject myLetters;// = GameObject.FindGameObjectWithTag("loading");
-    GameObject backIm;
-     
+
     // Start is called before the first frame update
     void Start()
     {
-        //Makes loading animation visible
-        myLetters = GameObject.FindGameObjectWithTag("loading");
-        myLetters.SetActive(true);
-
         fileName = CapturePhoto.fileName;
         GameObject ball = GameObject.Find("GameBall (1)");
         rb = ball.GetComponent<Rigidbody2D>();
@@ -66,20 +58,8 @@ public class LoadingImage : MonoBehaviour
 
         GameObject col = GameObject.Find("Background");
         myEdgeCollider = col.gameObject.AddComponent<EdgeCollider2D>();
-        
-        ball.SetActive(false);
 
-        StartCoroutine(WaitingOnImage());
-
-        IEnumerator WaitingOnImage()
-        {
-             yield return new WaitForSeconds(10);
-             GetWebCamImage();
-
-             yield return new WaitForEndOfFrame();
-             myLetters.SetActive(false);
-             ball.SetActive(true);
-        }
+        GetWebCamImage();
     }
 
     void GetWebCamImage()
@@ -126,18 +106,14 @@ public class LoadingImage : MonoBehaviour
         }
  
         TextureFromGradientRef(sumL, th, ref sumImg);
-<<<<<<< Updated upstream
    
 
-=======
-        //TextureFromGradientRef(kL, th, ref koImg);
->>>>>>> Stashed changes
     }
 
     // Update is called once per frame
     void OnGUI()
     {
-        backIm = GameObject.Find("Background");
+        GameObject backIm = GameObject.Find("Background");
         backIm.GetComponent<RawImage>().texture = sumImg;
     }
     float gradientValue(int ex, int why, int colorVal, Texture2D image)
@@ -180,48 +156,6 @@ public class LoadingImage : MonoBehaviour
         }
 
         myEdgeCollider.points = colliderPoints.ToArray();
-<<<<<<< Updated upstream
-=======
-        output.Apply();*/
-
-        colliderPoints = new List<Vector2>();
-        int value_prev = 0;
-        for (int x = 0; x < output.width; x++)
-        {
-            List<int> y_list = new List<int>();
-            for (int y = 0; y < output.height - 1; y++)
-            {
-                if (g[x, y] >= thres)
-                {
-                    y_list.Add(y);
-                    output.SetPixel(x, y, Color.black);
-                }
-                else
-                    output.SetPixel(x, y, Color.white);
-            }
-
-            if (y_list.Count > 0)
-            {
-                int median = (int)y_list.Count / 2;
-
-                if (x == 0)
-                {
-                    value_prev = y_list[median];
-                }
-
-                if ((y_list[median] - value_prev > 50) || (value_prev - y_list[median] > 50))
-                {
-                    y_list[median] = value_prev;
-                }
-
-                colliderPoints.Add(new Vector2(x, y_list[median]));
-
-                value_prev = y_list[median];
-            }
-        }
-
-        myEdgeCollider.points = colliderPoints.ToArray();
->>>>>>> Stashed changes
         output.Apply();
 
     }
